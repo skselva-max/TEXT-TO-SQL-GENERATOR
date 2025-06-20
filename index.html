@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text to SQL Query Generator</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Text to SQL Generator</h1>
+    <textarea id="inputData" placeholder="Paste CSV-like data here..."></textarea>
+    <button onclick="generateSQL()">Generate SQL</button>
+    <pre id="outputSQL"></pre>
+  </div>
+  <script>
+    async function generateSQL() {
+      const raw_data = document.getElementById('inputData').value;
+      const response = await fetch('/generate_sql', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ raw_data })
+      });
+      const result = await response.json();
+      document.getElementById('outputSQL').textContent = result.sql || result.error;
+    }
+  </script>
+</body>
+</html>
